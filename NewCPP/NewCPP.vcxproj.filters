@@ -36,5 +36,11 @@
     <ClCompile Include="20220120_3.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="함수_자판기.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="팩토리얼.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
