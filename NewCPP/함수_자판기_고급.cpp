@@ -14,6 +14,8 @@ int main(void)
 	int iCoin = inputCoin(iCurrentMoney);
 	vendingMachine(iCurrentMoney, iCoin);
 	
+	
+	
 	return 0;
 }
 
