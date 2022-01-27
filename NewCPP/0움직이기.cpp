@@ -27,7 +27,6 @@ int main()
 
 	while (true)
 	{
-		system("cls");
 		// 2차원 배열을 출력하는 코드
 		for (int i = 0; i < 5; ++i)
 		{
@@ -45,7 +44,7 @@ int main()
 
 		MoveZero(iArray, iUser, pRowIndex, pColIndex);
 
-		system("pause");
+		system("cls");
 	}
 	
 

@@ -15,7 +15,7 @@ int main()
 
 	int iBingoCount = 0;
 	const int marking = 'X'; // '*'의 아스키 코드 번호가 '42'이기 때문에 난수로 42가 나오면 '*'이 출력되므로 아스키 코드 번호 50 이후에 있는 'X'를 이용했다.
-
+	const int complete = 'O';
 	
 
 	// 먼저 1차원 배열에 난수를 대입한다.
@@ -44,11 +44,13 @@ int main()
 		}
 	}
 
+	cout << "빙고 게임 시작!" << endl;
+	cout << "===================================" << endl;
 
 
-	while (iBingoCount < 5)
+
+	while (true)
 	{
-		system("cls");
 
 		// 2차원 배열 출력 코드
 		// 배열의 값이 '*'이면 char형으로 출력하고, 그렇지 않으면 int형으로 출력한다.
@@ -56,7 +58,7 @@ int main()
 		{
 			for (int j = 0; j < 5; ++j)
 			{
-				if (iArray[i][j] == marking)
+				if (iArray[i][j] == marking || iArray[i][j] == complete)
 					cout << (char)iArray[i][j] << "\t";
 				else
 					cout << (int)iArray[i][j] << "\t";
@@ -66,8 +68,16 @@ int main()
 
 		cout << "===================================" << endl;
 
+		if (iBingoCount > 4)
+		{
+			cout << "축하합니다, " << iBingoCount << "빙고를 맞추셨습니다!" << endl;
+			break;
+		}
+		else
+			iBingoCount = 0; // 숫자를 입력할 때마다 iBingoCount를 0으로 초기화하고, 다시 빙고 개수를 세서 그 만큼 출력한다.
+
 		int iInput = 0;
-		cout << "빙고 카운트: " << iBingoCount << " 숫자를 입력하세요 > ";
+		cout << "숫자를 입력하세요 > ";
 		cin >> iInput;
 
 		// 입력받은 값과 같은 값을 0으로 바꾼다.
@@ -82,8 +92,13 @@ int main()
 			}
 		}
 
+		
+		
 
 		// 빙고 카운트가 증가되는 조건들
+		
+		
+		
 		// 가로 세로 빙고
 		for (int i = 0; i < 5; ++i)
 		{
@@ -91,7 +106,7 @@ int main()
 			{
 				++iBingoCount;
 			}
-			else if (iArray[0][i] == marking && iArray[1][i] == marking && iArray[2][i] == marking && iArray[3][i] == marking && iArray[4][i] == marking)
+			if (iArray[0][i] == marking && iArray[1][i] == marking && iArray[2][i] == marking && iArray[3][i] == marking && iArray[4][i] == marking)
 			{
 				++iBingoCount;
 			}
@@ -103,44 +118,21 @@ int main()
 		{
 			++iBingoCount;
 		}
-		else if (iArray[0][4] == marking && iArray[1][3] == marking && iArray[2][2] == marking && iArray[3][1] == marking && iArray[4][0] == marking)
+		if (iArray[0][4] == marking && iArray[1][3] == marking && iArray[2][2] == marking && iArray[3][1] == marking && iArray[4][0] == marking)
 		{
 			++iBingoCount;
 		}
 
-		
 
 		
 		
-		system("pause");
+		system("cls");
+
+		cout << "현재 " << iBingoCount << "빙고입니다." << endl;
+		cout << "===================================" << endl;
+
 		
 	}
-
-
-
-	// 마지막에 빙고 현황을 보여 주며 게임이 종료된다.
-
-	cout << "===================================" << endl;
-
-	for (int i = 0; i < 5; ++i)
-	{
-		for (int j = 0; j < 5; ++j)
-		{
-			if (iArray[i][j] == marking)
-				cout << (char)iArray[i][j] << "\t";
-			else
-				cout << (int)iArray[i][j] << "\t";
-		}
-		cout << endl;
-	}
-
-	cout << "===================================" << endl;
-
-	// 5빙고가 되었을 경우 게임은 종료된다.
-	cout << "빙고 카운트: " << iBingoCount << " 축하합니다, " << iBingoCount << "빙고를 맞추셨습니다!" << endl;
-	
-
-	
 
 
 
