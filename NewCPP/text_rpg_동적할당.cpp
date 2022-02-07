@@ -120,7 +120,7 @@ void HuntMonster(JOB _job, int _iMonster, tagStatus _tStatusArray[], tagStatus _
         cout << "플레이어 상태" << endl;
         cout << "=====================================" << endl;
         cout << "직업: " << _tStatusArray[_job - 1].cJob << endl
-        cout << "체력: " << _tStatusArray[_job - 1].iHp << endl;
+            cout << "체력: " << _tStatusArray[_job - 1].iHp << endl;
         cout << "공격력: " << _tStatusArray[_job - 1].iPower << endl;
         cout << "=====================================" << endl;
         cout << endl;

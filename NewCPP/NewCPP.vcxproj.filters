@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\복습 파일">
+      <UniqueIdentifier>{b971a1bc-f7ae-4f7a-bb3d-7cae7c40197d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="20220114.cpp">
@@ -73,6 +76,15 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="TextRPG.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="textrpg_선생님코드응용.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="동적할당 복습.cpp">
+      <Filter>소스 파일\복습 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="textrpg_동적할당추가.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
