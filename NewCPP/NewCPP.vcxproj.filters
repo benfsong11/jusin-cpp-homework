@@ -87,5 +87,14 @@
     <ClCompile Include="textrpg_동적할당추가.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="문자열입출력.cpp">
+      <Filter>소스 파일\복습 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="파일입출력.cpp">
+      <Filter>소스 파일\복습 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="이미지복사하기.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

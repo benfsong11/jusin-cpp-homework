@@ -37,6 +37,9 @@ int main()
 
 	*pPlayer = SelectJob();
 
+	if (nullptr == pPlayer)
+		return 0;
+
 	int iInput = 0;
 
 	while (true)
@@ -60,10 +63,11 @@ int main()
 		}
 		
 	}
-
-	delete pPlayer;
-	pPlayer = nullptr;
-
+	if (nullptr != pPlayer)
+	{
+		delete pPlayer;
+		pPlayer = nullptr;
+	}
 
 	return 0;
 }
@@ -120,14 +124,17 @@ void HuntingField(STATUS* _pPlayer)
 	int iInput = 0;
 	STATUS tMonster[3] = {};
 
+	FILE* fp = nullptr; // 저장하기 스트림
+	FILE* fp2 = nullptr; // 불러오기 스트림
+
 	while (true)
 	{
 		system("cls");
 		StatusView(_pPlayer);
-		cout << "1. 초급 던전 2. 중급 던전 3. 고급 던전 4. 뒤로 가기 > ";
+		cout << "1. 초급 던전 2. 중급 던전 3. 고급 던전 4. 뒤로 가기 5. 저장하기 6. 불러오기 > ";
 		cin >> iInput;
 
-		if (0 >= iInput || 4 < iInput)
+		if (0 >= iInput || 6 < iInput)
 			continue;
 		else if (4 == iInput)
 			return;
@@ -135,6 +142,54 @@ void HuntingField(STATUS* _pPlayer)
 		{
 			CreateMonster(tMonster, iInput);
 			HuntingMonster(_pPlayer, &tMonster[iInput - 1]);
+		}
+		else if (5 == iInput)
+		{
+			// 저장하기 코드
+			errno_t err_save = fopen_s(&fp, "../Data/text_rpg.txt", "wt");
+			if (err_save == 0)
+			{
+				fputs(_pPlayer->szJob, fp);
+				fputs("\n", fp);
+				fprintf(fp, "%d\n", _pPlayer->iHp);
+				fprintf(fp, "%d\n", _pPlayer->iMaxHp);
+				fprintf(fp, "%d\n", _pPlayer->iPower);
+				fclose(fp);
+			}
+			
+		}
+		else if (6 == iInput)
+		{
+			// 불러오기 코드
+			errno_t err_reload = fopen_s(&fp2, "../Data/text_rpg.txt", "rt");
+			
+			if (err_reload == 0)
+			{
+				char szJobReload[32] = "";
+				int iHpReload = 0;
+				int iMaxHpReload = 0;
+				int iPowerReload = 0;
+				fgets(szJobReload, sizeof(szJobReload), fp2);
+				fscanf_s(fp2, "%d", &iHpReload);
+				fscanf_s(fp2, "%d", &iMaxHpReload);
+				fscanf_s(fp2, "%d", &iPowerReload);
+
+				strcpy_s(_pPlayer->szJob, 32, szJobReload);
+
+				// _pPlayer->szJob에서 개행을 지우는 코드
+				for (int i = 0; _pPlayer->szJob[i] != 0; i++) {
+					if (_pPlayer->szJob[i] == '\n') {
+						_pPlayer->szJob[i] = 0;
+						break;
+					}
+				}
+				_pPlayer->iHp = iHpReload;
+				_pPlayer->iMaxHp = iMaxHpReload;
+				_pPlayer->iPower = iPowerReload;
+
+				fclose(fp2);
+			}
+			
 		}
 	}
 }
