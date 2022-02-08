@@ -145,8 +145,8 @@ void HuntingField(STATUS* _pPlayer)
 		}
 		else if (5 == iInput)
 		{
-			// 저장하기 코드
-			errno_t err_save = fopen_s(&fp, "../Data/text_rpg.txt", "wt");
+			// 저장하기 코드(텍스트 모드)
+			/*errno_t err_save = fopen_s(&fp, "../Data/text_rpg.txt", "wt");
 			if (err_save == 0)
 			{
 				fputs(_pPlayer->szJob, fp);
@@ -155,13 +155,30 @@ void HuntingField(STATUS* _pPlayer)
 				fprintf(fp, "%d\n", _pPlayer->iMaxHp);
 				fprintf(fp, "%d\n", _pPlayer->iPower);
 				fclose(fp);
+			}*/
+			
+			// 바이너리 모드
+			errno_t err_save = fopen_s(&fp, "../Data/text_rpg.bin", "wb");
+			if (err_save == 0)
+			{
+				fwrite(_pPlayer, sizeof(_pPlayer), 11, fp);
+				// 내가 사용하는 구조체의 크기, sizeof(tagStatus)는 44바이트다.
+				// fwrite 함수의 두 번째 인자, sizeof(_pPlayer)는 구조체 포인터이므로 4바이트다.
+				// sizeof(_pPlayer)(4) * fwrite 함수의 세 번째 인자(11) == 44바이트 만큼 text_rpg.bin 파일에 저장한다.
+				// sizeof(tagStatus)가 44바이트이기 때문에 위의 저장된 값이 44바이트 이상이어야 한다.
+				// 만약 sizeof(_pPlayer) * 10 == 40바이트인 경우에는 마지막 4바이트 만큼의 데이터가 저장되지 않는다.
+				fclose(fp);
+			}
+			else
+			{
+				cout << "파일 개방 실패..." << endl;
 			}
 			
 		}
 		else if (6 == iInput)
 		{
-			// 불러오기 코드
-			errno_t err_reload = fopen_s(&fp2, "../Data/text_rpg.txt", "rt");
+			// 불러오기 코드(텍스트 모드)
+			/*errno_t err_reload = fopen_s(&fp2, "../Data/text_rpg.txt", "rt");
 			
 			if (err_reload == 0)
 			{
@@ -188,8 +205,19 @@ void HuntingField(STATUS* _pPlayer)
 				_pPlayer->iPower = iPowerReload;
 
 				fclose(fp2);
-			}
+			}*/
 			
+			// 바이너리 모드
+			errno_t err_reload = fopen_s(&fp2, "../Data/text_rpg.bin", "rb");
+			if (err_reload == 0)
+			{
+				fread(_pPlayer, sizeof(_pPlayer), 11, fp2);
+				fclose(fp2);
+			}
+			else
+			{
+				cout << "파일 개방 실패..." << endl;
+			}
 		}
 	}
 }
