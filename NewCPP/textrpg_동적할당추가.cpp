@@ -5,9 +5,12 @@ using namespace std;
 typedef struct tagStatus
 {
 	char szJob[32];
+	int iLevel;
 	int iHp;
 	int iMaxHp;
 	int iPower;
+	int iExp;
+	int iMaxExp;
 
 }STATUS;
 
@@ -85,21 +88,30 @@ STATUS SelectJob()
 	{
 	case Warrior:
 		strcpy_s(tStatus.szJob, 32, "전사");
+		tStatus.iLevel = 1;
 		tStatus.iMaxHp = 100;
 		tStatus.iHp = tStatus.iMaxHp;
 		tStatus.iPower = 20;
+		tStatus.iExp = 0;
+		tStatus.iMaxExp = 200;
 		break;
 	case Magician:
 		strcpy_s(tStatus.szJob, 32, "마법사");
+		tStatus.iLevel = 1;
 		tStatus.iMaxHp = 45;
 		tStatus.iHp = tStatus.iMaxHp;
 		tStatus.iPower = 40;
+		tStatus.iExp = 0;
+		tStatus.iMaxExp = 200;
 		break;
 	case Archer:
 		strcpy_s(tStatus.szJob, 32, "궁수");
+		tStatus.iLevel = 1;
 		tStatus.iMaxHp = 60;
 		tStatus.iHp = tStatus.iMaxHp;
 		tStatus.iPower = 30;
+		tStatus.iExp = 0;
+		tStatus.iMaxExp = 200;
 		break;
 	default:
 		cout << "게임을 종료합니다." << endl;
@@ -114,8 +126,10 @@ void StatusView(STATUS* _pStatus)
 {
 	cout << "======================================" << endl;
 	cout << "직업: " << _pStatus->szJob << endl;
-	cout << "체력/최대 체력: " << _pStatus->iHp << "/" << _pStatus->iMaxHp << endl;
+	cout << "레벨: " << _pStatus->iLevel << endl;
+ 	cout << "체력/최대 체력: " << _pStatus->iHp << "/" << _pStatus->iMaxHp << endl;
 	cout << "공격력: " << _pStatus->iPower << endl;
+	cout << "경험치/최대 경험치: " << _pStatus->iExp << "/" << _pStatus->iMaxExp << endl;
 	cout << "======================================" << endl;
 }
 
@@ -161,12 +175,13 @@ void HuntingField(STATUS* _pPlayer)
 			errno_t err_save = fopen_s(&fp, "../Data/text_rpg.bin", "wb");
 			if (err_save == 0)
 			{
-				fwrite(_pPlayer, sizeof(_pPlayer), 11, fp);
+				fwrite(_pPlayer, sizeof(*_pPlayer), 1, fp);
 				// 내가 사용하는 구조체의 크기, sizeof(tagStatus)는 44바이트다.
 				// fwrite 함수의 두 번째 인자, sizeof(_pPlayer)는 구조체 포인터이므로 4바이트다.
 				// sizeof(_pPlayer)(4) * fwrite 함수의 세 번째 인자(11) == 44바이트 만큼 text_rpg.bin 파일에 저장한다.
 				// sizeof(tagStatus)가 44바이트이기 때문에 위의 저장된 값이 44바이트 이상이어야 한다.
 				// 만약 sizeof(_pPlayer) * 10 == 40바이트인 경우에는 마지막 4바이트 만큼의 데이터가 저장되지 않는다.
+				// sizeof(*_pPlayer)(44)를 넣어주면 세 번째 인자에 1을 넣으면 된다.
 				fclose(fp);
 			}
 			else
@@ -211,7 +226,7 @@ void HuntingField(STATUS* _pPlayer)
 			errno_t err_reload = fopen_s(&fp2, "../Data/text_rpg.bin", "rb");
 			if (err_reload == 0)
 			{
-				fread(_pPlayer, sizeof(_pPlayer), 11, fp2);
+				fread(_pPlayer, sizeof(*_pPlayer), 1, fp2);
 				fclose(fp2);
 			}
 			else
@@ -228,18 +243,21 @@ void CreateMonster(STATUS* _pMonster, int _iInput)
 	{
 	case Bear:
 		strcpy_s(_pMonster[_iInput - 1].szJob, 32, "곰");
+		_pMonster[_iInput - 1].iLevel = 1;
 		_pMonster[_iInput - 1].iMaxHp = 30;
 		_pMonster[_iInput - 1].iHp = _pMonster[_iInput - 1].iMaxHp;
 		_pMonster[_iInput - 1].iPower = 10;
 		break;
 	case Goblin:
 		strcpy_s(_pMonster[_iInput - 1].szJob, 32, "고블린");
+		_pMonster[_iInput - 1].iLevel = 2;
 		_pMonster[_iInput - 1].iMaxHp = 50;
 		_pMonster[_iInput - 1].iHp = _pMonster[_iInput - 1].iMaxHp;
 		_pMonster[_iInput - 1].iPower = 30;
 		break;
 	case Devil:
 		strcpy_s(_pMonster[_iInput - 1].szJob, 32, "악마");
+		_pMonster[_iInput - 1].iLevel = 3;
 		_pMonster[_iInput - 1].iMaxHp = 60;
 		_pMonster[_iInput - 1].iHp = _pMonster[_iInput - 1].iMaxHp;
 		_pMonster[_iInput - 1].iPower = 40;
@@ -279,6 +297,16 @@ void HuntingMonster(STATUS* _pPlayer, STATUS* _pMonster)
 			if (0 >= _pMonster->iHp)
 			{
 				_pMonster->iHp = _pMonster->iMaxHp;
+				_pPlayer->iExp += _pMonster->iHp;
+				if (_pPlayer->iExp >= _pPlayer->iMaxExp)
+				{
+					cout << "레벨이 올랐습니다!" << endl;
+					_pPlayer->iMaxExp += _pMonster->iHp;
+					_pPlayer->iExp = 0;
+					_pPlayer->iMaxHp += 30;
+					_pPlayer->iPower += 10;
+					++_pPlayer->iLevel;
+				}
 				cout << "축하합니다! 사냥에 성공하셨습니다!" << endl;
 				system("pause");
 				break;
